@@ -1,0 +1,27 @@
+apiVersion: extensions.maistra.io/v1alpha1
+kind: ServiceMeshExtension
+metadata:
+  name: sample
+spec:
+  config: |
+    {
+      "auth_cluster": "outbound|8080||keycloak.default.svc.cluster.local",
+      "auth_host": "keycloak.default.svc.cluster.local:8080",
+      "login_uri": "http://localhost:8080/auth/realms/master/protocol/openid-connect/auth",
+      "token_uri": "http://localhost:8080/auth/realms/master/protocol/openid-connect/token",
+      "client_id": "test",
+      "client_secret": "INSERT_CLIENT_SECRET_HERE"
+    }
+  image: test
+  phase: PreAuthN
+  priority: 102
+  workloadSelector:
+    labels:
+      app: httpbin
+status:
+  deployment:
+    sha256: 18727b12917d8e8430006b350750596a32ce521b5f47a93bcc84d045b7b4188f
+    url: http://nginx.default.svc.cluster.local/oidc.wasm
+  inline:
+    phase: PreAuthN
+    priority: 102
